@@ -1,8 +1,10 @@
 ---
 ssh_config_pubkeys: []
 #  - user: toto
+#    keyfile: /path/to/AuthorizedKeyFile
 #    pubkey: toto public ssh key
 #  - user: tata
+#    keyfile: /path/to/AuthorizedKeyFile
 #    pubkey: tata public ssh key
 ssh_config_authorized_keys_file: False
 ssh_config_match_config: False
