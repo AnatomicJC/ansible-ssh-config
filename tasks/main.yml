@@ -11,9 +11,14 @@
     group: "root"
     mode: "0755"
 
+- name: Create users
+  user:
+    name: "{{ item.user }}"
+  with_items: "{{ ssh_config_pubkeys }}"
+
 - name: Push public keys
   copy:
-    dest: "{{ item.user }}"
+    dest: "{{ item.keyfile }}"
     content: "{{ item.pubkey }}"
   with_items: "{{ ssh_config_pubkeys }}"
 
