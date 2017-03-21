@@ -59,8 +59,23 @@
     msg: "Set SSH config has failed, sshd_config file has been restored"
   when: ssh_check_config.stdout != "" or ssh_check_config.rc
 
+#################################### 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!! IMPORTANT !!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !DON'T USE ANSIBLE SERVICE MODULE!
+# !!!!!! ON THE LINE BELOW !!!!!!!!!
+# !!!YOU CAN LOSE SSH CONNECTION !!!
+# !!!!!!KEEP THE SHELL MODULE!!!!!!!
+# !!I WILL KILL YOU IF YOU CHANGE !!
+# !!!!!!!!! SOMETHING !!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!! IMPORTANT !!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+####################################
 - name: Config has changed and sshd_config seems ok, restart SSH server
-  service:
-    name: ssh
-    state: restarted
+  shell:
+    /etc/init.d/ssh restart
   when: sshd_config.changed
+  async: 60
+  poll: 5
