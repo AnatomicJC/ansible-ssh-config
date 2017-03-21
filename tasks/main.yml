@@ -1,0 +1,66 @@
+---
+- name: add Debian Wheezy workaround
+  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
+  when: (ansible_distribution == "Debian") and (ansible_distribution_release == "wheezy")
+
+- name: Create /etc/ssh/keys folder
+  file:
+    dest: "/etc/ssh/keys"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: Push public keys
+  copy:
+    dest: "{{ item.user }}"
+    content: "{{ item.pubkey }}"
+  with_items: "{{ ssh_config_pubkeys }}"
+
+- name: Secure /etc/ssh/moduli file
+  shell: |
+    awk '$5 > 2000' /etc/ssh/moduli > "${HOME}/moduli"
+    if [ ! -s "${HOME}/moduli" ]; then exit 1; fi
+    mv "${HOME}/moduli" /etc/ssh/moduli
+  changed_when: False
+
+- name: Backup sshd_config file
+  command: cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+  changed_when: False
+  
+- name: Push sshd_config file
+  template:
+    src: "etc/ssh/sshd_config.j2"
+    dest: "/etc/ssh/sshd_config"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: sshd_config
+
+- name: Check if SSH config is ok
+  command: sshd -t
+  register: ssh_check_config
+  changed_when: False
+  failed_when: False
+
+- debug:
+    msg: "{{ ssh_check_config }}"
+  when: ssh_check_config.stdout != "" or ssh_check_config.rc
+
+- name: Restore sshd_config file
+  command: "{{ item }}"
+  changed_when: False
+  with_items:
+    - cp /etc/ssh/sshd_config /etc/ssh/sshd_config.faulty
+    - cp /etc/ssh/sshd_config.backup /etc/ssh/sshd_config
+  when: ssh_check_config.stdout != "" or ssh_check_config.rc
+  
+- fail:
+    msg: "Set SSH config has failed, sshd_config file has been restored"
+  when: ssh_check_config.stdout != "" or ssh_check_config.rc
+
+- name: Config has changed and sshd_config seems ok, restart SSH server
+  service:
+    name: ssh
+    state: restarted
+  when: sshd_config.changed

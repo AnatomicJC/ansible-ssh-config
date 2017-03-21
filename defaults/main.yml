@@ -1,0 +1,10 @@
+---
+ssh_config_pubkeys: []
+#  - user: toto
+#    pubkey: toto public ssh key
+#  - user: tata
+#    pubkey: tata public ssh key
+ssh_config_authorized_keys_file: False
+ssh_config_match_config: False
+ssh_config_permit_root_login: "without-password"
+ssh_config_password_authentication: "no"
