@@ -1,5 +1,7 @@
 ---
-ssh_config_pubkeys: []
+ssh_config_base_pubkeys: []
+ssh_config_group_pubkeys: []
+ssh_config_hosts_pubkeys: []
 #  - user: toto
 #    keyfile: /path/to/AuthorizedKeyFile
 #    pubkey: toto public ssh key
