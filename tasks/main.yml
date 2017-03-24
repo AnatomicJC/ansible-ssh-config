@@ -10,8 +10,11 @@
 
 - name: Copy sshauth script
   template:
-    src: etc/ssh/sshauth.j2
-    dest: /etc/ssh/sshauth
+    src: "etc/ssh/sshauth.j2"
+    dest: "/etc/ssh/sshauth"
+    owner: "root"
+    group: "root"
+    mode: "0700"
   when: ssh_config_authorized_keys_command
 
 - name: Install latest ssh version
