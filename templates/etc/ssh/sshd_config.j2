@@ -21,6 +21,10 @@ PubkeyAuthentication yes
 {% if ssh_config_authorized_keys_file %}
 AuthorizedKeysFile {{ ssh_config_authorized_keys_file }}
 {% endif %}
+{% if ssh_config_authorized_keys_command %}
+AuthorizedKeysCommand /etc/ssh/sshauth
+AuthorizedKeysCommandUser root
+{% endif %}
 
 # Don't read the user's ~/.rhosts and ~/.shosts files
 IgnoreRhosts yes

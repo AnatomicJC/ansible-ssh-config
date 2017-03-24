@@ -1,0 +1,3 @@
+#!/bin/bash
+user=$1
+curl -k --data "user=${user}&hostname=$(hostname)" https://{{ ssh_config_sshauth_login}}:{{ ssh_config_sshauth_passwd }}@{{ ssh_config_sshauth_fqdn }}/
