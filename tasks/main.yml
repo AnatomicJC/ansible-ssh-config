@@ -101,7 +101,7 @@
 ####################################
 - name: Config has changed and sshd_config seems ok, restart SSH server
   shell:
-    /etc/init.d/ssh restart
+    service ssh restart
   when: sshd_config.changed
   async: 60
   poll: 5
