@@ -39,6 +39,15 @@
     content: "{{ item.pubkey }}"
   with_items: "{{ ssh_config_pubkeys }}"
 
+- name: Check if ssh_host_ed25519_key SSH key exists
+  stat:
+    path: '/etc/ssh/ssh_host_ed25519_key'
+  register: ed25519_key
+
+- name: Create /etc/ssh/ssh_host_ed25519_key SSH key
+  shell: "ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ''"
+  when: not ed25519_key.stat.exists
+
 - name: Secure /etc/ssh/moduli file
   shell: |
     awk '$5 > 2000' /etc/ssh/moduli > "${HOME}/moduli"
