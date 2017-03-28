@@ -4,10 +4,6 @@
     msg="You must define AuthorizedKeysCommand variables"
   when: ssh_config_authorized_keys_command and (not ssh_config_sshauth_login or not ssh_config_sshauth_passwd or not ssh_config_sshauth_fqdn)
 
-- name: add Debian Wheezy workaround
-  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_release }}.yml"
-  when: (ansible_distribution == "Debian") and (ansible_distribution_release == "wheezy")
-
 - name: Copy sshauth script
   template:
     src: "etc/ssh/sshauth.j2"
