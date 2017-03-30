@@ -17,3 +17,4 @@ ssh_config_authorized_keys_command: False
 ssh_config_sshauth_login: "login"
 ssh_config_sshauth_passwd: "passwd"
 ssh_config_sshauth_fqdn: "sshauth.example.com"
+ssh_config_more_security: True

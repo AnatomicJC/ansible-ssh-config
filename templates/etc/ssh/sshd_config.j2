@@ -54,9 +54,11 @@ PrintMotd no
 PrintLastLog yes
 TCPKeepAlive yes
 
+{% if ssh_config_more_security %}
 KexAlgorithms {{ ssh_config_kexalgorithm }}
 Ciphers {{ ssh_config_ciphers }}
 MACs {{ ssh_config_macs }}
+{% endif %}
 
 # Allow client to pass locale environment variables
 AcceptEnv LANG LC_*
