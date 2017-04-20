@@ -13,10 +13,13 @@
     mode: "0700"
   when: ssh_config_authorized_keys_command
 
-- name: Install latest ssh version
+- name: Install required packages
   apt:
-    name: "ssh"
+    name: "{{ item }}"
     state: "latest"
+  with_items:
+    - ssh
+    - curl
 
 - name: Create /etc/ssh/keys folder
   file:
