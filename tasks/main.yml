@@ -36,6 +36,14 @@
     ssh_key_bits: 2048
   with_items: "{{ ssh_config_pubkeys }}"
 
+- name: Create SFTP folders
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+  with_items: "{{ ssh_config_sftp_folders }}"
+
 - name: Push public keys
   copy:
     dest: "{{ item.keyfile }}"
