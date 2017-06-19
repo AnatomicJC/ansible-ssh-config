@@ -49,6 +49,7 @@
     dest: "{{ item.keyfile }}"
     content: "{{ item.pubkey }}"
   with_items: "{{ ssh_config_pubkeys }}"
+  tags: ssh-config-push-keys
 
 - name: Check if ssh_host_ed25519_key SSH key exists
   stat:
