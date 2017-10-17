@@ -1,0 +1,132 @@
+---
+- name: AuthorizedKeysCommand variables checks
+  fail:
+    msg="You must define AuthorizedKeysCommand variables"
+  when: ssh_config_authorized_keys_command and (not ssh_config_sshauth_login or not ssh_config_sshauth_passwd or not ssh_config_sshauth_fqdn)
+
+- name: Copy sshauth script
+  template:
+    src: "etc/ssh/sshauth.j2"
+    dest: "/etc/ssh/sshauth"
+    owner: "root"
+    group: "root"
+    mode: "0700"
+  when: ssh_config_authorized_keys_command
+
+- name: Install required packages
+  # on some servers diag-clinical servers like BR-CDG-1001
+  # we need to downgrade ssh to the 6.6 version. we put a preferences
+  # file with 1001 as pin preference, this 1001 value is don't
+  # take into account by ansible apt module.
+  # So we use shell module
+  #  apt:
+  #    name: "{{ item }}"
+  #    state: "latest"
+  #    default_release: "yes"
+  #  with_items:
+  #    - ssh
+  #    - curl
+  shell: apt-get install -y --force-yes ssh curl
+
+- name: Create /etc/ssh/keys folder
+  file:
+    dest: "/etc/ssh/keys"
+    state: "directory"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: Create users
+  user:
+    name: "{{ item.user }}"
+    generate_ssh_key: "{{ ssh_config_generate_user_ssh_key }}"
+    ssh_key_bits: 2048
+    password: "{{ item.password | default('') }}"
+  with_items: "{{ ssh_config_pubkeys }}"
+
+- name: Create SFTP folders
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+  with_items: "{{ ssh_config_sftp_folders }}"
+
+- name: Push public keys
+  copy:
+    dest: "{{ item.keyfile }}"
+    content: "{{ item.pubkey }}"
+  with_items: "{{ ssh_config_pubkeys }}"
+  tags: ssh-config-push-keys
+
+- name: Check if ssh_host_ed25519_key SSH key exists
+  stat:
+    path: '/etc/ssh/ssh_host_ed25519_key'
+  register: ed25519_key
+
+- name: Create /etc/ssh/ssh_host_ed25519_key SSH key
+  shell: "ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ''"
+  when: not ed25519_key.stat.exists
+
+- name: Secure /etc/ssh/moduli file
+  shell: |
+    awk '$5 > 2000' /etc/ssh/moduli > "${HOME}/moduli"
+    if [ ! -s "${HOME}/moduli" ]; then exit 1; fi
+    mv "${HOME}/moduli" /etc/ssh/moduli
+  changed_when: False
+
+- name: Backup sshd_config file
+  command: cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+  changed_when: False
+  
+- name: Push sshd_config file
+  template:
+    src: "etc/ssh/sshd_config.j2"
+    dest: "/etc/ssh/sshd_config"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+  register: sshd_config
+
+- name: Check if SSH config is ok
+  command: sshd -t
+  register: ssh_check_config
+  changed_when: False
+  failed_when: False
+
+- debug:
+    msg: "{{ ssh_check_config }}"
+  when: ssh_check_config.stdout != "" or ssh_check_config.rc
+
+- name: Restore sshd_config file
+  command: "{{ item }}"
+  changed_when: False
+  with_items:
+    - cp /etc/ssh/sshd_config /etc/ssh/sshd_config.faulty
+    - cp /etc/ssh/sshd_config.backup /etc/ssh/sshd_config
+  when: ssh_check_config.stdout != "" or ssh_check_config.rc
+  
+- fail:
+    msg: "Set SSH config has failed, sshd_config file has been restored"
+  when: ssh_check_config.stdout != "" or ssh_check_config.rc
+
+#################################### 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!! IMPORTANT !!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !DON'T USE ANSIBLE SERVICE MODULE!
+# !!!!!! ON THE LINE BELOW !!!!!!!!!
+# !!!YOU CAN LOSE SSH CONNECTION !!!
+# !!!!!!KEEP THE SHELL MODULE!!!!!!!
+# !!I WILL KILL YOU IF YOU CHANGE !!
+# !!!!!!!!! SOMETHING !!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!! IMPORTANT !!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+####################################
+- name: Config has changed and sshd_config seems ok, restart SSH server
+  shell:
+    service ssh restart
+  when: sshd_config.changed
+  async: 60
+  poll: 5
