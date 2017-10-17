@@ -5,9 +5,11 @@ ssh_config_hosts_pubkeys: []
 #  - user: toto
 #    keyfile: /path/to/AuthorizedKeyFile
 #    pubkey: toto public ssh key
+#    password: http://docs.ansible.com/ansible/latest/user_module.html
 #  - user: tata
 #    keyfile: /path/to/AuthorizedKeyFile
 #    pubkey: tata public ssh key
+#    password: http://docs.ansible.com/ansible/latest/user_module.html
 ssh_config_authorized_keys_file: False
 ssh_config_match_config: False
 ssh_config_permit_root_login: "without-password"
