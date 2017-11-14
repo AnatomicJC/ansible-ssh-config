@@ -41,7 +41,7 @@
     name: "{{ item.user }}"
     generate_ssh_key: "{{ ssh_config_generate_user_ssh_key }}"
     ssh_key_bits: 2048
-    password: "{{ item.password | default('') }}"
+    password: "{{ item.password | default('*') }}"
   with_items: "{{ ssh_config_pubkeys }}"
 
 - name: Create SFTP folders
