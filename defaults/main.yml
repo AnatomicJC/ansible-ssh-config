@@ -1,4 +1,5 @@
 ---
+ssh_config_enabled: False
 ssh_config_ssh_port: 22
 ssh_config_base_pubkeys: []
 ssh_config_group_pubkeys: []
