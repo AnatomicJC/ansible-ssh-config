@@ -1,0 +1,3 @@
+{% for item in ssh_config_totp_users %}
+HOTP/T30/6 {{ item.user }} - {{ item.hexkey }}
+{% endfor %}

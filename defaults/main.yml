@@ -15,6 +15,7 @@ ssh_config_hosts_pubkeys: []
 ssh_config_authorized_keys_file: False
 ssh_config_match_config: False
 ssh_config_permit_root_login: "without-password"
+# Keep ssh_config_password_authentication to no if you use TOTP authentication
 ssh_config_password_authentication: "no"
 ssh_config_generate_user_ssh_key: "no"
 ssh_config_authorized_keys_command: False
@@ -23,3 +24,12 @@ ssh_config_sshauth_passwd: "passwd"
 ssh_config_sshauth_fqdn: "sshauth.example.com"
 ssh_config_more_security: True
 ssh_config_sftp_folders: {}
+ssh_config_challenge_response_authentication: "no"
+ssh_config_authentication_methods: False
+# To enable public key with totp authentication, set this:
+# ssh_config_authentication_methods: "publickey,keyboard-interactive:pam"
+ssh_config_totp_enabled: False
+# https://wiki.archlinux.org/index.php/Pam_oath
+ssh_config_totp_users: []
+#  - user: a valid user
+#    hexkey: a random key generated with 'head -10 /dev/urandom | sha512sum | cut -b 1-30'

@@ -1,0 +1,25 @@
+---
+- name: Install oath tools
+  apt:
+    name: libpam-oath
+    state: latest
+
+- name: Configure /etc/pam.d/sshd file
+  lineinfile:
+    path: /etc/pam.d/sshd
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - regexp: '@include common-auth'
+      line: '#@include common-auth'
+    - regexp: 'auth required pam_oath.so usersfile=/etc/users.oath window=30 digits=6'
+      line: 'auth required pam_oath.so usersfile=/etc/users.oath window=30 digits=6'
+
+- name: Push /etc/users.oath
+  template:
+    src: "etc/users.oath.j2"
+    dest: "/etc/users.oath"
+    owner: root
+    group: root
+    mode: 0600

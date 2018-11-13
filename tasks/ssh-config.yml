@@ -4,6 +4,9 @@
     msg="You must define AuthorizedKeysCommand variables"
   when: ssh_config_authorized_keys_command and (not ssh_config_sshauth_login or not ssh_config_sshauth_passwd or not ssh_config_sshauth_fqdn)
 
+- import_tasks: totp.yml
+  when: ssh_config_totp_enabled
+
 - name: Copy sshauth script
   template:
     src: "etc/ssh/sshauth.j2"
