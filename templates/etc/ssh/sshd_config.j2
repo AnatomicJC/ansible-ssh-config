@@ -6,7 +6,6 @@ Port {{ ssh_config_ssh_port }}
 Protocol 2
 # HostKeys for protocol version 2
 HostKey /etc/ssh/ssh_host_ed25519_key
-HostKey /etc/ssh/ssh_host_rsa_key
 #Privilege Separation is turned on for security
 UsePrivilegeSeparation yes
 
@@ -57,17 +56,19 @@ AuthenticationMethods {{ ssh_config_authentication_methods }}
 # Change to no to disable tunnelled clear text passwords
 PasswordAuthentication {{ ssh_config_password_authentication }}
 
-X11Forwarding yes
-X11DisplayOffset 10
+X11Forwarding {{ ssh_config_x11_forwarding }}
+AllowTcpForwarding {{ ssh_config_allow_tcp_forwarding }}
+AllowStreamLocalForwarding {{ ssh_config_allow_stream_local_forwarding }}
+GatewayPorts {{ ssh_config_gateway_ports }}
+PermitTunnel {{ ssh_config_permit_tunnel }}
+
 PrintMotd no
 PrintLastLog yes
 TCPKeepAlive yes
 
-{% if ssh_config_more_security %}
 KexAlgorithms {{ ssh_config_kexalgorithm }}
 Ciphers {{ ssh_config_ciphers }}
 MACs {{ ssh_config_macs }}
-{% endif %}
 
 # Allow client to pass locale environment variables
 AcceptEnv LANG LC_*

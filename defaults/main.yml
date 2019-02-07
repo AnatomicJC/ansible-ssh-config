@@ -22,7 +22,6 @@ ssh_config_authorized_keys_command: False
 ssh_config_sshauth_login: "login"
 ssh_config_sshauth_passwd: "passwd"
 ssh_config_sshauth_fqdn: "sshauth.example.com"
-ssh_config_more_security: True
 ssh_config_sftp_folders: {}
 ssh_config_challenge_response_authentication: "no"
 ssh_config_authentication_methods: False
@@ -33,3 +32,9 @@ ssh_config_totp_enabled: False
 ssh_config_totp_users: []
 #  - user: a valid user
 #    hexkey: a random key generated with 'head -10 /dev/urandom | sha512sum | cut -b 1-30'
+
+ssh_config_x11_forwarding: "no"
+ssh_config_gateway_ports: "no"
+ssh_config_allow_tcp_forwarding: "no"
+ssh_config_allow_stream_local_forwarding: "no"
+ssh_config_permit_tunnel: "no"
