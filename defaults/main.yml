@@ -38,3 +38,5 @@ ssh_config_gateway_ports: "no"
 ssh_config_allow_tcp_forwarding: "no"
 ssh_config_allow_stream_local_forwarding: "no"
 ssh_config_permit_tunnel: "no"
+
+ssh_config_log_level: "INFO"
