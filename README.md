@@ -5,7 +5,9 @@ This role will configure SSH on remote server.
 Have a look at these ressources:
 - https://stribika.github.io/2015/01/04/secure-secure-shell.html
 - https://www.guillaume-leduc.fr/securiser-secure-shell-ssh.html
-- https://wiki.mozilla.org/Security/Guidelines/OpenSSH
+- https://wiki.mozilla.org/Security/Guidelines/OpenSSH (some outdated config...)
+- https://www.ssh.com/ssh/sshd_config/ (for port forwarding configuration)
+- https://buzut.fr/configuration-dun-serveur-linux-ssh/ (for minimal KexAlgorithms, Ciphers, and MACs)
 
 Role Variables
 --------------
