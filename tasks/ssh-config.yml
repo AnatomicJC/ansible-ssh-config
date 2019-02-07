@@ -73,9 +73,8 @@
 
 - name: Secure /etc/ssh/moduli file
   shell: |
-    awk '$5 > 2000' /etc/ssh/moduli > "${HOME}/moduli"
-    if [ ! -s "${HOME}/moduli" ]; then exit 1; fi
-    mv "${HOME}/moduli" /etc/ssh/moduli
+    awk '$5 > 3071' /etc/ssh/moduli > /etc/ssh/moduli.tmp
+    mv /etc/ssh/moduli.tmp /etc/ssh/moduli
   changed_when: False
 
 - name: Backup sshd_config file
