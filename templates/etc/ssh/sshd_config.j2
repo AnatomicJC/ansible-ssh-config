@@ -58,7 +58,9 @@ PasswordAuthentication {{ ssh_config_password_authentication }}
 
 X11Forwarding {{ ssh_config_x11_forwarding }}
 AllowTcpForwarding {{ ssh_config_allow_tcp_forwarding }}
+{% if ansible_distribution == 'Debian' and ansible_distribution_major_version >= '8' %}
 AllowStreamLocalForwarding {{ ssh_config_allow_stream_local_forwarding }}
+{% endif %}
 GatewayPorts {{ ssh_config_gateway_ports }}
 PermitTunnel {{ ssh_config_permit_tunnel }}
 
