@@ -95,8 +95,6 @@
   register: ssh_check_config
   changed_when: False
   failed_when: False
-  environment:
-    PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 - debug:
     msg: "{{ ssh_check_config }}"
