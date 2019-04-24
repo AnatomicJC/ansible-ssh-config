@@ -129,8 +129,7 @@
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ####################################
 - name: Config has changed and sshd_config seems ok, restart SSH server
-  shell:
-    service ssh restart
+  shell: "{{ 'systemctl restart ssh' if ansible_service_mgr == 'systemd' else 'service ssh restart' }}"
   when: sshd_config.changed
   async: 60
   poll: 5
