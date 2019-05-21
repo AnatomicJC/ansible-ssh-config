@@ -2,10 +2,10 @@
 - name: AuthorizedKeysCommand variables checks
   fail:
     msg="You must define AuthorizedKeysCommand variables"
-  when: ssh_config_authorized_keys_command and (not ssh_config_sshauth_login or not ssh_config_sshauth_passwd or not ssh_config_sshauth_fqdn)
+  when: ssh_config_authorized_keys_command|bool and (not ssh_config_sshauth_login|bool or not ssh_config_sshauth_passwd|bool or not ssh_config_sshauth_fqdn|bool)
 
 - import_tasks: totp.yml
-  when: ssh_config_totp_enabled
+  when: ssh_config_totp_enabled|bool
 
 - name: Copy sshauth script
   template:
@@ -14,7 +14,7 @@
     owner: "root"
     group: "root"
     mode: "0700"
-  when: ssh_config_authorized_keys_command
+  when: ssh_config_authorized_keys_command|bool
 
 - name: Install required packages
   # on some servers diag-clinical servers like BR-CDG-1001
@@ -69,7 +69,7 @@
 
 - name: Create /etc/ssh/ssh_host_ed25519_key SSH key
   shell: "ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ''"
-  when: not ed25519_key.stat.exists
+  when: not ed25519_key.stat.exists|bool
 
 - name: Secure /etc/ssh/moduli file
   shell: |
@@ -98,7 +98,7 @@
 
 - debug:
     msg: "{{ ssh_check_config }}"
-  when: ssh_check_config.stdout != "" or ssh_check_config.rc
+  when: ssh_check_config.stdout != "" or ssh_check_config.rc|bool
 
 - name: Restore sshd_config file
   command: "{{ item }}"
@@ -106,11 +106,11 @@
   with_items:
     - cp /etc/ssh/sshd_config /etc/ssh/sshd_config.faulty
     - cp /etc/ssh/sshd_config.backup /etc/ssh/sshd_config
-  when: ssh_check_config.stdout != "" or ssh_check_config.rc
+  when: ssh_check_config.stdout != "" or ssh_check_config.rc|bool
   
 - fail:
     msg: "Set SSH config has failed, sshd_config file has been restored"
-  when: ssh_check_config.stdout != "" or ssh_check_config.rc
+  when: ssh_check_config.stdout != "" or ssh_check_config.rc|bool
 
 #################################### 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -128,6 +128,6 @@
 ####################################
 - name: Config has changed and sshd_config seems ok, restart SSH server
   shell: "{{ 'systemctl restart ssh' if ansible_service_mgr == 'systemd' else 'service ssh restart' }}"
-  when: sshd_config.changed
+  when: sshd_config.changed|bool
   async: 60
   poll: 5
