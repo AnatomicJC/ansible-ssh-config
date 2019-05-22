@@ -2,7 +2,7 @@
 - name: AuthorizedKeysCommand variables checks
   fail:
     msg="You must define AuthorizedKeysCommand variables"
-  when: ssh_config_authorized_keys_command|bool and (not ssh_config_sshauth_login|bool or not ssh_config_sshauth_passwd|bool or not ssh_config_sshauth_fqdn|bool)
+  when: ssh_config_authorized_keys_command|bool and (ssh_config_sshauth_login|length == 0 or ssh_config_sshauth_passwd|length == 0 or ssh_config_sshauth_fqdn|length == 0)
 
 - import_tasks: totp.yml
   when: ssh_config_totp_enabled|bool
