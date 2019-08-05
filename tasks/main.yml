@@ -2,3 +2,5 @@
 - import_tasks: ssh-config.yml
   tags: ssh_config_role
   when: ssh_config_enabled|bool
+
+- meta: flush_handlers

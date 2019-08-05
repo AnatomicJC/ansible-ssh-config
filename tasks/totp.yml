@@ -2,7 +2,7 @@
 - name: Install oath tools
   apt:
     name: libpam-oath
-    state: latest
+    state: present
 
 - name: Configure /etc/pam.d/sshd file
   lineinfile:

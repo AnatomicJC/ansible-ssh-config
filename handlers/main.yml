@@ -1,2 +1,23 @@
 ---
-# handlers file for ssh_config
+#################################### 
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!! IMPORTANT !!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !DON'T USE ANSIBLE SERVICE MODULE!
+# !!!!!! ON THE LINE BELOW !!!!!!!!!
+# !!!YOU CAN LOSE SSH CONNECTION !!!
+# !!!!!!KEEP THE SHELL MODULE!!!!!!!
+# !!I WILL KILL YOU IF YOU CHANGE !!
+# !!!!!!!!! SOMETHING !!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!! IMPORTANT !!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+####################################
+
+# Config has changed and sshd_config seems ok, restart SSH server
+
+- name: restart ssh
+  command: "{{ 'systemctl restart ssh' if ansible_service_mgr == 'systemd' else 'service ssh restart' }}"
+  when: sshd_config.changed|bool
+  async: 60
+  poll: 5
