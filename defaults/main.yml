@@ -18,6 +18,8 @@ ssh_config_permit_root_login: "without-password"
 # Keep ssh_config_password_authentication to no if you use TOTP authentication
 ssh_config_password_authentication: "no"
 ssh_config_generate_user_ssh_key: "no"
+ssh_config_user_ssh_key_bits: 4096
+ssh_config_user_ssh_key_type: "ed25519"
 ssh_config_authorized_keys_command: False
 ssh_config_sshauth_login: "login"
 ssh_config_sshauth_passwd: "passwd"
