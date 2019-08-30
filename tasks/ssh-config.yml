@@ -47,7 +47,7 @@
     generate_ssh_key: "{{ item.generate_ssh_key | default('no') }}"
     ssh_key_bits: "{{ item.ssh_key_bits | default('4096') }}"
     ssh_key_type: "{{ item.ssh_key_type | default('ed25519') }}"
-    shell: "{{ ssh_config_user_shell }}"
+    shell: "{{ item.shell | default('/bin/bash')}}"
     password: "{{ item.password | default('*') }}"
   with_items: "{{ ssh_config_pubkeys }}"
 
