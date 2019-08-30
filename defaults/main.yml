@@ -8,10 +8,16 @@ ssh_config_hosts_pubkeys: []
 #    keyfile: /path/to/AuthorizedKeyFile
 #    pubkey: toto public ssh key
 #    password: http://docs.ansible.com/ansible/latest/user_module.html
+#    generate_ssh_key: no
+#    ssh_key_bits: 4096
+#    ssh_key_type: ed25519
 #  - user: tata
 #    keyfile: /path/to/AuthorizedKeyFile
 #    pubkey: tata public ssh key
 #    password: http://docs.ansible.com/ansible/latest/user_module.html
+#    generate_ssh_key: no
+#    ssh_key_bits: 4096
+#    ssh_key_type: ed25519
 ssh_config_authorized_keys_file: False
 ssh_config_match_config: False
 ssh_config_permit_root_login: "without-password"

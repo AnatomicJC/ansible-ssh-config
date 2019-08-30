@@ -44,9 +44,10 @@
 - name: Create users
   user:
     name: "{{ item.user }}"
-    generate_ssh_key: "{{ ssh_config_generate_user_ssh_key }}"
-    ssh_key_bits: "{{ ssh_config_user_ssh_key_bits }}"
-    ssh_key_type: "{{ ssh_config_user_ssh_key_type }}"
+    generate_ssh_key: "{{ item.generate_ssh_key | default('no') }}"
+    ssh_key_bits: "{{ item.ssh_key_bits | default('4096') }}"
+    ssh_key_type: "{{ item.ssh_key_type | default('ed25519') }}"
+    shell: "{{ ssh_config_user_shell }}"
     password: "{{ item.password | default('*') }}"
   with_items: "{{ ssh_config_pubkeys }}"
 
