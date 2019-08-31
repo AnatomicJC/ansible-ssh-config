@@ -51,6 +51,13 @@
     password: "{{ item.password | default('*') }}"
   with_items: "{{ ssh_config_pubkeys }}"
 
+- name: Give admin users full sudoers rights
+  template:
+    src: etc/sudoers.d/superuser.j2
+    dest: /etc/sudoers.d/superuser
+    validate: 'visudo -cf %s'
+    mode: 0440
+
 - name: Create SFTP folders
   file:
     path: "{{ item.path }}"

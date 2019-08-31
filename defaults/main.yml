@@ -12,6 +12,7 @@ ssh_config_hosts_pubkeys: []
 #    ssh_key_bits: 4096
 #    ssh_key_type: ed25519
 #    shell: /bin/bash
+#    sudo: false
 #  - user: tata
 #    keyfile: /path/to/AuthorizedKeyFile
 #    pubkey: tata public ssh key
@@ -20,6 +21,7 @@ ssh_config_hosts_pubkeys: []
 #    ssh_key_bits: 4096
 #    ssh_key_type: ed25519
 #    shell: /bin/bash
+#    sudo: false
 ssh_config_authorized_keys_file: False
 ssh_config_match_config: False
 ssh_config_permit_root_login: "without-password"
