@@ -68,7 +68,7 @@
 
 - name: Push public keys
   copy:
-    dest: "{{ item.keyfile }}"
+    dest: "{{ item.keyfile | default('/etc/ssh/keys/authorized_keys.' + item.user) }}"
     content: "{{ item.pubkey }}"
   with_items: "{{ ssh_config_pubkeys }}"
   tags: ssh-config-push-keys
