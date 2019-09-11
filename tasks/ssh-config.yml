@@ -31,6 +31,7 @@
     name:
     - ssh
     - curl
+    - sudo
     state: "present"
 
 - name: Create /etc/ssh/keys folder
