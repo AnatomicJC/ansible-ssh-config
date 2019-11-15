@@ -32,6 +32,13 @@
       mode: "0400"
 
 - name: Install required packages
+  apt:
+    name:
+    - python3-requests
+    state: "present"
+  when: ssh_config_authorized_keys_command|bool
+
+- name: Install required packages
   # on some servers diag-clinical servers like BR-CDG-1001
   # we need to downgrade ssh to the 6.6 version. we put a preferences
   # file with 1001 as pin preference, this 1001 value is don't
@@ -41,7 +48,6 @@
   apt:
     name:
     - ssh
-    - curl
     - sudo
     state: "present"
 
