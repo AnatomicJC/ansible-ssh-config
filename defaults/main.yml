@@ -34,6 +34,8 @@ ssh_config_authorized_keys_command: False
 ssh_config_sshauth_login: "login"
 ssh_config_sshauth_passwd: "passwd"
 ssh_config_sshauth_fqdn: "sshauth.example.com"
+# Set sslverify to false only on old distros who doesn't handle modern algorithms
+ssh_config_sshauth_sslverify: "true"
 ssh_config_sftp_folders: {}
 ssh_config_challenge_response_authentication: "no"
 ssh_config_authentication_methods: False

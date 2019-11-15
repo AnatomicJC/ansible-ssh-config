@@ -17,7 +17,15 @@ def get_pubkeys(user: str):
         'user': user,
         'hostname': gethostname()
     }
-    return post(config['url'], data=data).text.strip()
+    return post(
+        config['url'],
+        data=data,
+        auth=(
+            config['login'],
+            config['password']
+        ),
+        verify=config['sslverify'],
+    ).text.strip()
 
 if __name__ == "__main__":
     if len(argv) < 2:
