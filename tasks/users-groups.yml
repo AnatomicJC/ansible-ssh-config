@@ -1,0 +1,30 @@
+---
+- name: "Create groups"
+  group:
+    gid: "{{ item.gid }}"
+    name: "{{ item.name }}"
+    state: present
+  loop: "{{ ssh_config_system_users_groups }}"
+
+- name: Determine available groups
+  getent:
+    database: group
+
+- name: Determine if docker group exists
+  set_fact:
+    ssh_user_docker: "{{ ['docker'] if getent_group.docker is defined else [] }}"
+
+- name: Create users
+  user:
+    name: "{{ item.user }}"
+    generate_ssh_key: "{{ item.generate_ssh_key | default('no') }}"
+    ssh_key_bits: "{{ item.ssh_key_bits | default('4096') }}"
+    ssh_key_type: "{{ item.ssh_key_type | default('ed25519') }}"
+    shell: "{{ item.shell | default('/bin/bash') }}"
+    password: "{{ item.password | default('*') }}"
+    groups: "{% if 'sudo' in item.groups %}\
+             {{ (item.groups + ssh_user_docker | default([])) | join(',') }}\
+             {% else %}\
+             {{ item.groups | default([]) | join(',') }}{% endif %}"
+    append: no
+  with_items: "{{ ssh_config_pubkeys }}"

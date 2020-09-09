@@ -22,6 +22,11 @@ ssh_config_hosts_pubkeys: []
 #    ssh_key_type: ed25519
 #    shell: /bin/bash
 #    sudo: false
+ssh_config_system_users_groups: []
+#  - name: operator
+#    gid: 3000
+#  - name: administrator
+#    gid: 2000
 ssh_config_authorized_keys_file: "/etc/ssh/keys/authorized_keys.%u"
 ssh_config_match_config: False
 ssh_config_permit_root_login: "without-password"

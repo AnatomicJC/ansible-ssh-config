@@ -1,5 +1,0 @@
-{% for item in ssh_config_pubkeys %}
-{% if item.sudo | default(false) %}
-{{ item.user }} ALL=(ALL:ALL) NOPASSWD:ALL
-{% endif %}
-{% endfor %}

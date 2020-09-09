@@ -1,38 +1,15 @@
 ---
-- name: AuthorizedKeysCommand variables checks
-  fail:
-    msg="You must define AuthorizedKeysCommand variables"
-  when: >
-    ssh_config_authorized_keys_command|bool
-    and ('%s'|format(ssh_config_sshauth_login)|length == 0
-    or '%s'|format(ssh_config_sshauth_passwd)|length == 0
-    or '%s'|format(ssh_config_sshauth_fqdn)|length == 0)
-
 - import_tasks: totp.yml
   when: ssh_config_totp_enabled|bool
 
 - import_tasks: sshauth.yml
   when: ssh_config_authorized_keys_command|bool
 
-- name: Install required packages
-  apt:
-    name:
-    - python3-requests
-    state: "present"
-  when: ssh_config_authorized_keys_command|bool
+- import_tasks: sudo.yml
 
-- name: Install required packages
-  # on some servers diag-clinical servers like BR-CDG-1001
-  # we need to downgrade ssh to the 6.6 version. we put a preferences
-  # file with 1001 as pin preference, this 1001 value is don't
-  # take into account by ansible apt module.
-  # So we use shell module
-  #shell: apt-get install -y --force-yes ssh curl
-  apt:
-    name:
-    - ssh
-    - sudo
-    state: "present"
+- import_tasks: users-groups.yml
+
+- import_tasks: sftp-folders.yml
 
 - name: Create /etc/ssh/keys folder
   file:
@@ -41,32 +18,6 @@
     owner: "root"
     group: "root"
     mode: "0755"
-
-- name: Create users
-  user:
-    name: "{{ item.user }}"
-    generate_ssh_key: "{{ item.generate_ssh_key | default('no') }}"
-    ssh_key_bits: "{{ item.ssh_key_bits | default('4096') }}"
-    ssh_key_type: "{{ item.ssh_key_type | default('ed25519') }}"
-    shell: "{{ item.shell | default('/bin/bash') }}"
-    password: "{{ item.password | default('*') }}"
-  with_items: "{{ ssh_config_pubkeys }}"
-
-- name: Give admin users full sudoers rights
-  template:
-    src: etc/sudoers.d/superuser.j2
-    dest: /etc/sudoers.d/superuser
-    validate: 'visudo -cf %s'
-    mode: 0440
-
-- name: Create SFTP folders
-  file:
-    path: "{{ item.path }}"
-    state: directory
-    mode: 0755
-    owner: "{{ item.owner }}"
-    group: "{{ item.group }}"
-  with_items: "{{ ssh_config_sftp_folders }}"
 
 - name: Push public keys
   copy:

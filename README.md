@@ -16,6 +16,7 @@ Role Variables
   - You will have to define "base" public keys on your inventory/group_vars/all file. These "base" public keys will be added on all servers. You can add to these "base" public keys "group" and "host" public keys who will be merged in a ssh_config_pubkeys variable.
   - Take care to don't define same users in differents base, group or host
 context !!
+- `ssh_config_system_users_groups`: define system users groups
 - `ssh_config_authorized_keys_file`: define AuthorizedKeysFile
 - `ssh_config_match_config`: block text who contains Match User/Group configuration, used for sftp access
 - `ssh_config_permit_root_login`: Default without-password, you should not modify this value

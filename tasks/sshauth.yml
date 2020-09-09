@@ -1,4 +1,13 @@
 ---
+- name: AuthorizedKeysCommand variables checks
+  fail:
+    msg="You must define AuthorizedKeysCommand variables"
+  when: >
+    ssh_config_authorized_keys_command|bool
+    and ('%s'|format(ssh_config_sshauth_login)|length == 0
+    or '%s'|format(ssh_config_sshauth_passwd)|length == 0
+    or '%s'|format(ssh_config_sshauth_fqdn)|length == 0)
+
 - name: Copy sshauth script
   template:
     src: "{{ item.src }}"
@@ -17,3 +26,9 @@
       owner: "nobody"
       group: "nogroup"
       mode: "0400"
+
+- name: Install required packages
+  apt:
+    name:
+    - python3-requests
+    state: "present"
