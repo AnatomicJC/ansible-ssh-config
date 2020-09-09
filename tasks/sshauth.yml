@@ -1,0 +1,19 @@
+---
+- name: Copy sshauth script
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - src: "etc/ssh/sshauth.j2"
+      dest: "/etc/ssh/sshauth"
+      owner: "root"
+      group: "root"
+      mode: "0755"
+    - src: "etc/ssh/sshauth.json.j2"
+      dest: "/etc/ssh/sshauth.json"
+      owner: "nobody"
+      group: "nogroup"
+      mode: "0400"

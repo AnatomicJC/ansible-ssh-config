@@ -11,25 +11,8 @@
 - import_tasks: totp.yml
   when: ssh_config_totp_enabled|bool
 
-- name: Copy sshauth script
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: "{{ item.owner }}"
-    group: "{{ item.group }}"
-    mode: "{{ item.mode }}"
+- import_tasks: sshauth.yml
   when: ssh_config_authorized_keys_command|bool
-  with_items:
-    - src: "etc/ssh/sshauth.j2"
-      dest: "/etc/ssh/sshauth"
-      owner: "root"
-      group: "root"
-      mode: "0755"
-    - src: "etc/ssh/sshauth.json.j2"
-      dest: "/etc/ssh/sshauth.json"
-      owner: "nobody"
-      group: "nogroup"
-      mode: "0400"
 
 - name: Install required packages
   apt:
