@@ -63,6 +63,7 @@
   file:
     path: "{{ item.path }}"
     state: directory
+    mode: 0755
     owner: "{{ item.owner }}"
     group: "{{ item.group }}"
   with_items: "{{ ssh_config_sftp_folders }}"
@@ -71,6 +72,7 @@
   copy:
     dest: "{{ item.keyfile | default('/etc/ssh/keys/authorized_keys.' + item.user) }}"
     content: "{{ item.pubkey }}"
+    mode: 0644
   with_items: "{{ ssh_config_pubkeys }}"
   tags: ssh-config-push-keys
 
