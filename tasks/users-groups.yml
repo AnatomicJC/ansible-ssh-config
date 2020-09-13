@@ -22,8 +22,8 @@
     ssh_key_type: "{{ item.ssh_key_type | default('ed25519') }}"
     shell: "{{ item.shell | default('/bin/bash') }}"
     password: "{{ item.password | default('*') }}"
-    groups: "{% if 'sudo' in item.groups %}\
-             {{ (item.groups + ssh_user_docker | default([])) | join(',') }}\
+    groups: "{% if item.groups is defined and if 'sudo' in item.groups %}\
+             {{ (item.groups | default([]) + ssh_user_docker) | join(',') }}\
              {% else %}\
              {{ item.groups | default([]) | join(',') }}{% endif %}"
     append: no
