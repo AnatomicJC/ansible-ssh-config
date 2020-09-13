@@ -12,7 +12,9 @@ ssh_config_hosts_pubkeys: []
 #    ssh_key_bits: 4096
 #    ssh_key_type: ed25519
 #    shell: /bin/bash
-#    sudo: false
+#    groups:
+#      - sudo
+#      - operator
 #  - user: tata
 #    keyfile: /path/to/AuthorizedKeyFile
 #    pubkey: tata public ssh key
@@ -21,7 +23,9 @@ ssh_config_hosts_pubkeys: []
 #    ssh_key_bits: 4096
 #    ssh_key_type: ed25519
 #    shell: /bin/bash
-#    sudo: false
+#    groups:
+#      - sudo
+#      - operator
 ssh_config_system_users_groups: []
 #  - name: operator
 #    gid: 3000
