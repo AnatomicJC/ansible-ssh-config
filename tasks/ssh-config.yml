@@ -22,7 +22,7 @@
 - name: Push public keys
   copy:
     dest: "{{ item.keyfile | default('/etc/ssh/keys/authorized_keys.' + item.user) }}"
-    content: "{{ item.pubkey }}"
+    content: "{{ item.pubkey | default('') }}"
     mode: 0644
   with_items: "{{ ssh_config_pubkeys }}"
   tags: ssh-config-push-keys
