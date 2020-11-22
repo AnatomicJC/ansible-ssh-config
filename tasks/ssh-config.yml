@@ -1,4 +1,9 @@
 ---
+- name: Gather the package facts
+  package_facts:
+    manager: apt
+  when: ansible_facts.packages is not defined
+
 - import_tasks: totp.yml
   when: ssh_config_totp_enabled|bool
 

@@ -3,6 +3,7 @@
   apt:
     name: sudo
     state: "present"
+  when: "'sudo' not in ansible_facts.packages"
 
 - name: "Allow passwordless sudoers"
   lineinfile:
