@@ -84,3 +84,7 @@ UseDNS no
 {% if ssh_config_match_config %}
 {{ ssh_config_match_config }}
 {% endif %}
+{% if ssh_config_allow_users_param %}
+
+AllowUsers {{ ssh_config_pubkeys | map(attribute='user') | list | join(' ') }}
+{% endif %}
