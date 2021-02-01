@@ -65,6 +65,7 @@ ssh_config_permit_tunnel: "no"
 ssh_config_log_level: "INFO"
 
 ssh_config_allow_users_param: no
+ssh_config_allow_users_extras: []
 
 ssh_config_kexalgorithm: "curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256"
 ssh_config_ciphers: "chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr"
